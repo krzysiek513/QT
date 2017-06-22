@@ -3,13 +3,10 @@
 
 MyWindow::MyWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MyWindow)
+    ui(new Ui::MyWindow),
+    crypt(true)
 {
     ui->setupUi(this);
-//    enRB = new QRadioButton(this);
-//    cryText = new QTextEdit();
-
-//    QObject::connect(enRB,SIGNAL(pressed()),qApp,SLOT(encrypt()));
 }
 
 MyWindow::~MyWindow()
@@ -17,19 +14,36 @@ MyWindow::~MyWindow()
     delete ui;
 }
 
-void MyWindow::encrypt()
+//void MyWindow::encrypt()
+//{
+//    ui->cryText->setText("dupa");
+//}
+
+void MyWindow::write(QString FileName, QString text)
 {
-    ui->cryText->setText("dupa");
+    QFile mFile(FileName);
+
+    if(!mFile.open(QFile::WriteOnly | QFile::Text))
+    {
+            qDebug() << "could not open file for write!";
+            return;
+    }
+    QTextStream out(&mFile);
+    out << text;
+
+    mFile.flush();
+    mFile.close();
+
 }
 
-void MyWindow::read(QString FileName)
+QString MyWindow::read(QString FileName)
 {
     QFile mFile(FileName);
 
     if(!mFile.open(QFile::ReadOnly | QFile::Text))
     {
             qDebug() << "could not open file for read!";
-            return;
+            return "error";
     }
     QTextStream in(&mFile);
     QString mText = in.readAll();
@@ -38,6 +52,8 @@ void MyWindow::read(QString FileName)
     qDebug() << mText;
 
     mFile.close();
+    return mText;
+
 
 }
 
@@ -45,35 +61,55 @@ void MyWindow::on_pathPB_clicked()
 {
     QString file;
     QString filter ("text files (*.txt);;crypted (*.ksz);;all files (*.*)");
-    file = QFileDialog::getOpenFileName (this,"Otwieranie",".",filter);
+    file = QFileDialog::getOpenFileName (this,"Open",".",filter);
     ui->pathLE -> setText(file);
+
 }
 
 void MyWindow::on_okPB_clicked()
 {
-//    if(encrypt)
-//    {
-//        QString pathToRead = ui->pathLE->text();
-//        ui->cryText->setText("ok \n" + pathToRead);
-//        QString fileName = "file.txt";
+    if(crypt)
+    {
+        QString pathToRead = ui->pathLE->text();
+      //  ui->cryText->setText("ok \n" + pathToRead);
+     //   QString fileName = "file.txt";
 
-//        //cry->encrypt(pathToRead);
-//        QString keys = ui->key->text();
-//        //cry->key  = keys.split(" ")[0].toInt();
+        //cry->encrypt(pathToRead);
+        //QString keys = ui->key->text();
+        //cry->key  = keys.split(" ")[0].toInt();
 
-//       // ui->label->setText(QString::number(cry->x));
-//        write(fileName, cry->encryptedText);
-//    }
-//    else
-//    {
+       // ui->label->setText(QString::number(cry->x));
+
+        QString file;
+        QString filter ("text files (*.txt);;crypted (*.ksz);;all files (*.*)");
+        file = QFileDialog::getSaveFileName (this,"Sava",".",filter);
+
+        QFileInfo dir(pathToRead);
+        QString s = dir.absoluteFilePath();
+        ui->cryText->setText("s \n" + s);
+
+        write(file, read(s));
+    }
+    else
+    {
         QString pathToRead = ui->pathLE->text();
         ui->cryText->setText("ok \n" + pathToRead);
         QFileInfo dir(pathToRead);
         QString s = dir.absoluteFilePath();
         ui->cryText->setText("s \n" + s);
         read(s);
+    }
+}
 
-        //qDebug() << s;
-        //ui->label->setText("dsf");
-//    }
+void MyWindow::on_deRB_clicked()
+{
+    ui->deRB->setChecked(true); // by wlaczyc przycisk musi byc true
+    crypt = false;
+
+}
+
+void MyWindow::on_enRB_clicked()
+{
+    crypt = true;
+    ui->enRB->setChecked(true);
 }
