@@ -1,6 +1,7 @@
 #ifndef MYWINDOW_H
 #define MYWINDOW_H
 
+#include "vernam.h"
 #include <QRadioButton>
 #include <QTextEdit>
 #include <QFileDialog>
@@ -31,10 +32,14 @@ private slots:
 
     void on_enRB_clicked();
 
+    void on_keyPB_clicked();
+
 private:
     bool crypt;
+    bool showPass;
 
     Ui::MyWindow *ui;
+    Vernam *encryping;
 
     void write(QString FileName, QString text);
     QString read(QString FileName);

@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mywindow.cpp
+        mywindow.cpp\
+        vernam.cpp
 
 HEADERS += \
-        mywindow.h
+        mywindow.h\
+        vernam.h
 
 FORMS += \
         mywindow.ui

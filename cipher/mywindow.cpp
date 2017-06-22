@@ -4,9 +4,12 @@
 MyWindow::MyWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MyWindow),
-    crypt(false)
+    crypt(false),
+    showPass(false)
 {
     ui->setupUi(this);
+    encryping = new Vernam();
+    ui->keyLE->setEchoMode(QLineEdit::Password);
 }
 
 MyWindow::~MyWindow()
@@ -25,7 +28,6 @@ void MyWindow::write(QString FileName, QString text)
     }
     QTextStream out(&mFile);
     out << text;
-
     mFile.flush();
     mFile.close();
 
@@ -42,9 +44,6 @@ QString MyWindow::read(QString FileName)
     }
     QTextStream in(&mFile);
     QString mText = in.readAll();
-    //cry->decrypt(mText);
-    ui->cryText->setText(mText);
-    qDebug() << mText;
 
     mFile.close();
     return mText;
@@ -57,14 +56,14 @@ void MyWindow::on_pathPB_clicked()
     if(crypt)
     {
         QString file;
-        QString filter ("text files (*.txt);;crypted (*.jok);;all files (*.*)");
+        QString filter ("text files (*.txt);;encrypted (*.jok);;all files (*.*)");
         file = QFileDialog::getOpenFileName (this,"Open",".",filter);
         ui->pathLE -> setText(file);
     }
     else
     {
         QString file;
-        QString filter ("crypted (*.jok);;text files (*.txt);;all files (*.*)");
+        QString filter ("encrypted (*.jok);;text files (*.txt);;all files (*.*)");
         file = QFileDialog::getOpenFileName (this,"Open",".",filter);
         ui->pathLE -> setText(file);
     }
@@ -72,32 +71,28 @@ void MyWindow::on_pathPB_clicked()
 
 void MyWindow::on_okPB_clicked()
 {
-    if(crypt)
+    QString plainText = 0;
+    if(crypt) //szyfrowanie
     {
         QString pathToRead = ui->pathLE->text();
-      //  ui->cryText->setText("ok \n" + pathToRead);
-     //   QString fileName = "file.txt";
-
-        //cry->encrypt(pathToRead);
-        //QString keys = ui->key->text();
-        //cry->key  = keys.split(" ")[0].toInt();
-
-       // ui->label->setText(QString::number(cry->x));
-
-        QString filter ("crypted (*.jok)");
+        QString filter ("encrypted (*.jok)");
         QString file = QFileDialog::getSaveFileName (this,"Save",".",filter);
-
-
-        write(file, read(pathToRead));
+        QString key = ui->keyLE->text();
+        QString text = read(pathToRead);
+        write(file, encryping->encrypt(text, key));
     }
-    else
+    else //odszyfrowanie
     {
+
         QString pathToRead = ui->pathLE->text();
-        read(pathToRead);
+        QString key = ui->keyLE->text();
+        QString text = read(pathToRead);
         QString filter ("text files (*.txt)");
         QString file = QFileDialog::getSaveFileName (this,"Save",".",filter);
+        plainText = encryping->decrypt(text, key);
+        write(file, plainText);
 
-        write(file, read(pathToRead));
+        ui->cryText->setText(plainText);
 
     }
 }
@@ -113,4 +108,13 @@ void MyWindow::on_enRB_clicked()
 {
     crypt = true;
     ui->enRB->setChecked(true);
+}
+
+void MyWindow::on_keyPB_clicked()
+{
+    showPass = !showPass;
+    if(showPass)
+        ui->keyLE->setEchoMode(QLineEdit::Normal);
+    else
+        ui->keyLE->setEchoMode(QLineEdit::Password);
 }
