@@ -3,7 +3,9 @@
 
 #include <QRadioButton>
 #include <QTextEdit>
+#include <QFileDialog>
 
+#include <QDebug>
 #include <QMainWindow>
 
 namespace Ui {
@@ -20,11 +22,17 @@ public:
     void encrypt();
     void decrypt();
 
+private slots:
+    void on_pathPB_clicked();
+
+    void on_okPB_clicked();
+
 private:
     Ui::MyWindow *ui;
-    QRadioButton *enRB;
-    QRadioButton *deRB;
-    QTextEdit  *cryText;
+
+    //void write(QString FileName, QString text);
+    void read(QString FileName);
+
 };
 
 #endif // MYWINDOW_H
