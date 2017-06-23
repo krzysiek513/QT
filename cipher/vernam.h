@@ -2,15 +2,13 @@
 #define VERNAM_H
 
 #include <QString>
+#include <QDebug>
 
 class Vernam
 {
 public:
-    QString text;
-    QString key;
-    std::string enc;
-    std::string dec;
     Vernam();
+    std::string enc;
 
     QString encrypt(QString s, QString key);
 

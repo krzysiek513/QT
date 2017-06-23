@@ -45,6 +45,8 @@ QString MyWindow::read(QString FileName)
     QTextStream in(&mFile);
     QString mText = in.readAll();
 
+
+    mFile.flush();
     mFile.close();
     return mText;
 
@@ -71,7 +73,6 @@ void MyWindow::on_pathPB_clicked()
 
 void MyWindow::on_okPB_clicked()
 {
-    QString plainText = 0;
     if(crypt) //szyfrowanie
     {
         QString pathToRead = ui->pathLE->text();
@@ -89,9 +90,8 @@ void MyWindow::on_okPB_clicked()
         QString text = read(pathToRead);
         QString filter ("text files (*.txt)");
         QString file = QFileDialog::getSaveFileName (this,"Save",".",filter);
-        plainText = encryping->decrypt(text, key);
+        QString plainText = encryping->decrypt(text, key);
         write(file, plainText);
-
         ui->cryText->setText(plainText);
 
     }
