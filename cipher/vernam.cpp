@@ -11,7 +11,7 @@ QString Vernam::encrypt(QString text, QString key)
     std::string k = key.toStdString();
     std::string s = text.toStdString();
     char c;
-    int i,j=0;
+    uint i,j=0;
     for(i=0;i<s.size();i++)
     {
           c = s[i]^k[j];
@@ -31,7 +31,7 @@ QString Vernam::decrypt(QString text, QString key)
     std::string dec;
     std::string k = key.toStdString();
     std::string s = text.toStdString();
-    int i,j=0;
+    uint i,j=0;
     char c;
     for(i=0;i<s.size();i++)
     {

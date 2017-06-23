@@ -4,7 +4,7 @@
 MyWindow::MyWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MyWindow),
-    crypt(false),
+    crypt(true),
     showPass(false)
 {
     ui->setupUi(this);
@@ -81,6 +81,8 @@ void MyWindow::on_okPB_clicked()
         QString key = ui->keyLE->text();
         QString text = read(pathToRead);
         write(file, encryping->encrypt(text, key));
+        ui->keyLE->setText("");
+        ui->pathLE->setText("");
     }
     else //odszyfrowanie
     {
@@ -91,14 +93,19 @@ void MyWindow::on_okPB_clicked()
         QString filter ("text files (*.txt)");
         QString file = QFileDialog::getSaveFileName (this,"Save",".",filter);
         QString plainText = encryping->decrypt(text, key);
+        ui->keyLE->setText("");
         write(file, plainText);
         ui->cryText->setText(plainText);
+        ui->pathLE->setText("");
 
     }
 }
 
 void MyWindow::on_deRB_clicked()
 {
+    ui->cryText->setText("");
+    ui->pathLE->setText("");
+    ui->keyLE->setText("");
     ui->deRB->setChecked(true);
     crypt = false;
 
@@ -106,6 +113,9 @@ void MyWindow::on_deRB_clicked()
 
 void MyWindow::on_enRB_clicked()
 {
+    ui->cryText->setText("");
+    ui->pathLE->setText("");
+    ui->keyLE->setText("");
     crypt = true;
     ui->enRB->setChecked(true);
 }
