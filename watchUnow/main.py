@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QComboBox
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QComboBox, QLabel
 
 
 #from title import titlebar
@@ -53,7 +54,7 @@ class watchUnow(QMainWindow):
     #     layout.addWidget(self.comboBox)
     #
     #     self.setLayout(layout)
-    #     self.show()
+    #     self.show()8
     #
     # def selectChange(self, status):
     #     print(f'Index: {status} | Text: {self.comboBox.currentText()}')
@@ -67,6 +68,7 @@ class watchUnow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon('icons/icon.png'))
     window = watchUnow()
     window.show()
     sys.exit(app.exec_())
