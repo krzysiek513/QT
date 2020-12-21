@@ -1,22 +1,18 @@
 import sys
 
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QTimer
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QListWidget, QPlainTextEdit, QListView, QAbstractItemView, QListWidgetItem, QDialog, QGridLayout, \
-    QLineEdit, QLabel
-import Pracownik
+    QLineEdit, QLabel, QProgressBar
 
 
 class QtApp(QWidget):
     def __init__(self, *args, **kwargs):
         super(QtApp, self).__init__(*args, **kwargs)
         self.setWindowTitle('QtApp')
-        self.listWidget = QListWidget()
+        self.listWidget = QListWidget(self)
         self.initUI()
-        # self.initSignals()
-        i=0
-        listaPracownikow = []
 
     def initUI(self):
         button_A = QPushButton('dodaj', self)
@@ -26,13 +22,18 @@ class QtApp(QWidget):
         button_B.setFixedSize(75, 50)
         button_B.clicked.connect(self.usun)
 
+        self.progressBar = QProgressBar(self)
+
         self.listWidget.setAlternatingRowColors(True)
         self.listWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.listWidget.setMovement(QListView.Free)
         self.listWidget.setMouseTracking(True)
 
-        resultView = QPlainTextEdit(self)
-        resultView.setReadOnly(True)
+        self.listWidget.addItem('Krzysiek Jot')
+        self.listWidget.addItem('replika Jot')
+
+        self.resultView = QPlainTextEdit(self)
+        self.resultView.setReadOnly(True)
 
         h_box = QHBoxLayout()
         h_box.addWidget(button_A)
@@ -40,14 +41,35 @@ class QtApp(QWidget):
 
         h2_box = QHBoxLayout()
         h2_box.addWidget(self.listWidget)
-        h2_box.addWidget(resultView)
+        h2_box.addWidget(self.resultView)
+
+        h3_box = QHBoxLayout()
+        h3_box.addWidget(self.progressBar)
 
         v_box = QVBoxLayout()
         v_box.addLayout(h2_box)
         v_box.addLayout(h_box)
+        v_box.addLayout(h3_box)
 #        v_box.setGeometry(300, 300, 300, 150)
 
+        self.listWidget.itemClicked.connect(self.showCurrentInfo)
         self.setLayout(v_box)
+
+    # def onItemEntered(self):
+    #     self.resultView.appendHtml(
+    #         '{0}: {1}'.format(formatColor('itemEntered', QColor(Qt.darkCyan)), item.text()))
+
+    def TimeCount(self):
+        value = self.listWidget.__len__()*10
+        if value < 100:
+            self.progressBar.setValue(value)
+        else:
+            self.listWidget.setDisabled()
+            print('Mamy 100%')
+
+    def showCurrentInfo(self, pozycja):
+        x = self.listWidget.currentRow()
+        self.resultView.appendPlainText(f'{pozycja.text()}, miejsce {x+1}')
 
     def dodaj(self):
         dialogBox = QDialog()
@@ -58,17 +80,14 @@ class QtApp(QWidget):
         def add():
             imie = EImie.text()
             nazwisko = ENazwisko.text()
-            if nazwisko=='':
-                self.listWidget.addItem('?')
-                #listaPracownikow.append(Pracownik.Pracownik(nazwisko='?'))
-            else:
-                nowy2 = Pracownik.Pracownik(imie="Barbara", nazwisko="Kotecka", stanowisko="Sekretrka", nrPracownika=2,
-                                            wyplata=4444)
-                self.listWidget.addItem(nowy2)
-            # nowy2 = Pracownik.Pracownik(imie="Barbara", nazwisko="Kotecka", stanowisko="Sekretrka", nrPracownika=2,
-            #                             wyplata=4444)
-            # listaPracownikow.append(nowy2)
-            # self.listWidget.addItem(Pracownik.Pracownik(imie, nazwisko))
+            if nazwisko!='' and imie!='':
+                text=imie+' '+nazwisko
+                self.listWidget.addItem(QListWidgetItem(text))
+                EImie.clear()
+                ENazwisko.clear()
+                x = self.listWidget.__len__()
+                self.resultView.appendPlainText(f'dodano {text}, miejsce {x}')
+                self.progressBar.setValue(x*10)
 
         def anu():
             dialogBox.close()
@@ -95,28 +114,28 @@ class QtApp(QWidget):
         dialogBox.exec_()
 
     def usun(self):
-        x = self.listWidget.currentRow()
-        self.listWidget.itemDelegate(x)
+        row = self.listWidget.currentRow()
+        print(row)
+        if row!=-1:
+            self.resultView.appendPlainText(f'usunieto {self.listWidget.item(row).text()}, miejsce {row + 1}')
+            self.listWidget.takeItem(row)
+            value = self.listWidget.__len__()
+            print(value)
+            self.progressBar.setValue(value*10)
 
 
 
-    def initSignals(self):
-        # self.listWidget.currentItemChanged.connect(self.onCurrentItemChanged)
-        # self.listWidget.currentRowChanged.connect(self.onCurrentRowChanged)
-        # self.listWidget.currentTextChanged.connect(self.onCurrentTextChanged)
-        # self.listWidget.itemActivated.connect(self.onItemActivated)
-        # self.listWidget.itemChanged.connect(self.onItemChanged)
-        self.listWidget.itemClicked.connect(self.onItemClicked)
-        # self.listWidget.itemDoubleClicked.connect(self.onItemDoubleClicked)
-        self.listWidget.itemEntered.connect(self.onItemEntered)
-        # self.listWidget.itemPressed.connect(self.onItemPressed)
-        # self.listWidget.itemSelectionChanged.connect(self.onItemSelectionChanged)
-
-    def onItemEntered(self):
-        i=i+1
-
-    def onItemClicked(self):
-        print(f'Wybrany obiekt z listy: {pozycja.text()}')
+            # def initSignals(self):
+    #     # self.listWidget.currentItemChanged.connect(self.onCurrentItemChanged)
+    #     # self.listWidget.currentRowChanged.connect(self.onCurrentRowChanged)
+    #     # self.listWidget.currentTextChanged.connect(self.onCurrentTextChanged)
+    #     # self.listWidget.itemActivated.connect(self.onItemActivated)
+    #     # self.listWidget.itemChanged.connect(self.onItemChanged)
+    #     self.listWidget.itemClicked.connect(self.onItemClicked)
+    #     # self.listWidget.itemDoubleClicked.connect(self.onItemDoubleClicked)
+    #     self.listWidget.itemEntered.connect(self.onItemEntered)
+    #     # self.listWidget.itemPressed.connect(self.onItemPressed)
+    #     # self.listWidget.itemSelectionChanged.connect(self.onItemSelectionChanged)
 
 
 if __name__ == '__main__':
