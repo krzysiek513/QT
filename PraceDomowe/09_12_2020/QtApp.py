@@ -23,7 +23,6 @@ class QtApp(QWidget):
         button_B.clicked.connect(self.usun)
 
         self.progressBar = QProgressBar(self)
-
         self.listWidget.setAlternatingRowColors(True)
         self.listWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.listWidget.setMovement(QListView.Free)
@@ -31,6 +30,10 @@ class QtApp(QWidget):
 
         self.listWidget.addItem('Krzysiek Jot')
         self.listWidget.addItem('replika Jot')
+
+        value = self.listWidget.__len__() * 10
+        self.progressBar.setValue(value)
+
 
         self.resultView = QPlainTextEdit(self)
         self.resultView.setReadOnly(True)
@@ -59,14 +62,6 @@ class QtApp(QWidget):
     #     self.resultView.appendHtml(
     #         '{0}: {1}'.format(formatColor('itemEntered', QColor(Qt.darkCyan)), item.text()))
 
-    def TimeCount(self):
-        value = self.listWidget.__len__()*10
-        if value < 100:
-            self.progressBar.setValue(value)
-        else:
-            self.listWidget.setDisabled()
-            print('Mamy 100%')
-
     def showCurrentInfo(self, pozycja):
         x = self.listWidget.currentRow()
         self.resultView.appendPlainText(f'{pozycja.text()}, miejsce {x+1}')
@@ -80,7 +75,8 @@ class QtApp(QWidget):
         def add():
             imie = EImie.text()
             nazwisko = ENazwisko.text()
-            if nazwisko!='' and imie!='':
+            x = self.listWidget.__len__()
+            if nazwisko!='' and imie!='' and x<10:
                 text=imie+' '+nazwisko
                 self.listWidget.addItem(QListWidgetItem(text))
                 EImie.clear()
@@ -120,7 +116,6 @@ class QtApp(QWidget):
             self.resultView.appendPlainText(f'usunieto {self.listWidget.item(row).text()}, miejsce {row + 1}')
             self.listWidget.takeItem(row)
             value = self.listWidget.__len__()
-            print(value)
             self.progressBar.setValue(value*10)
 
 
