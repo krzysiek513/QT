@@ -34,7 +34,6 @@ class QtApp(QWidget):
         value = self.listWidget.__len__() * 10
         self.progressBar.setValue(value)
 
-
         self.resultView = QPlainTextEdit(self)
         self.resultView.setReadOnly(True)
 
@@ -53,7 +52,7 @@ class QtApp(QWidget):
         v_box.addLayout(h2_box)
         v_box.addLayout(h_box)
         v_box.addLayout(h3_box)
-#        v_box.setGeometry(300, 300, 300, 150)
+        #        v_box.setGeometry(300, 300, 300, 150)
 
         self.listWidget.itemClicked.connect(self.showCurrentInfo)
         self.setLayout(v_box)
@@ -64,7 +63,7 @@ class QtApp(QWidget):
 
     def showCurrentInfo(self, pozycja):
         x = self.listWidget.currentRow()
-        self.resultView.appendPlainText(f'{pozycja.text()}, miejsce {x+1}')
+        self.resultView.appendPlainText(f'{pozycja.text()}, miejsce {x + 1}')
 
     def dodaj(self):
         dialogBox = QDialog()
@@ -76,14 +75,14 @@ class QtApp(QWidget):
             imie = EImie.text()
             nazwisko = ENazwisko.text()
             x = self.listWidget.__len__()
-            if nazwisko!='' and imie!='' and x<10:
-                text=imie+' '+nazwisko
+            if nazwisko != '' and imie != '' and x < 10:
+                text = imie + ' ' + nazwisko
                 self.listWidget.addItem(QListWidgetItem(text))
                 EImie.clear()
                 ENazwisko.clear()
                 x = self.listWidget.__len__()
                 self.resultView.appendPlainText(f'dodano {text}, miejsce {x}')
-                self.progressBar.setValue(x*10)
+                self.progressBar.setValue(x * 10)
 
         def anu():
             dialogBox.close()
@@ -93,9 +92,8 @@ class QtApp(QWidget):
         nazwisko = QLabel('nazwisko', dialogBox)
         ENazwisko = QLineEdit()
 
-
         buttonAdd = QPushButton('dodaj', dialogBox)
-        #dialogBox.setFixedSize(200, 200)
+        # dialogBox.setFixedSize(200, 200)
         buttonAdd.clicked.connect(add)
 
         buttonDel = QPushButton('anuluj', dialogBox)
@@ -111,14 +109,11 @@ class QtApp(QWidget):
 
     def usun(self):
         row = self.listWidget.currentRow()
-        print(row)
-        if row!=-1:
+        if row != -1:
             self.resultView.appendPlainText(f'usunieto {self.listWidget.item(row).text()}, miejsce {row + 1}')
             self.listWidget.takeItem(row)
             value = self.listWidget.__len__()
-            self.progressBar.setValue(value*10)
-
-
+            self.progressBar.setValue(value * 10)
 
             # def initSignals(self):
     #     # self.listWidget.currentItemChanged.connect(self.onCurrentItemChanged)
