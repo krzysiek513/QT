@@ -28,6 +28,14 @@ class Ui_Dialog(object):
         self.textEdit.setGeometry(QtCore.QRect(170, 110, 231, 141))
         self.textEdit.setObjectName("textEdit")
 
+        self.spinBox = QtWidgets.QSpinBox(Dialog)
+        self.spinBox.setGeometry(QtCore.QRect(200, 80, 42, 22))
+        self.spinBox.setObjectName("spinBox")
+
+        self.label_3 = QtWidgets.QLabel(Dialog)
+        self.label_3.setGeometry(QtCore.QRect(70, 80, 55, 16))
+        self.label_3.setObjectName("label_3")
+
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -36,3 +44,4 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label.setText(_translate("Dialog", "type tekst"))
         self.label_2.setText(_translate("Dialog", "select tekst font"))
+        self.label_3.setText(_translate("Dialog", "fornt size"))
