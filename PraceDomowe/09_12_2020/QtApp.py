@@ -1,8 +1,7 @@
 import sys
 
-from PyQt5.QtCore import QSize, Qt, QTimer
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, \
+
+from PyQt5.QtWidgets import QApplication, QPushButton, QHBoxLayout, QVBoxLayout, \
     QWidget, QListWidget, QPlainTextEdit, QListView, QAbstractItemView, QListWidgetItem, QDialog, QGridLayout, \
     QLineEdit, QLabel, QProgressBar
 
