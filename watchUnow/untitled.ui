@@ -38,23 +38,13 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>-1</x>
-      <y>0</y>
-      <width>190</width>
-      <height>450</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
       <x>190</x>
       <y>0</y>
       <width>410</width>
-      <height>450</height>
+      <height>440</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -63,6 +53,81 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+   </widget>
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>190</width>
+      <height>440</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>life</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>Nowy element</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Nowy podelement</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Nowy podelement</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Nowy podelement</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Nowy podelement</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nowy element</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nowy element</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nowy podelement</string>
+        </property>
+       </item>
+      </item>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>sd</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>d</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Nowy podelement</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Nowy podelement</string>
+       </property>
+      </item>
+     </item>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
