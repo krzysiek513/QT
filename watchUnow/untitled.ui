@@ -54,7 +54,7 @@
      </sizepolicy>
     </property>
    </widget>
-   <widget class="QTreeWidget" name="treeWidget">
+   <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -63,71 +63,6 @@
       <height>440</height>
      </rect>
     </property>
-    <column>
-     <property name="text">
-      <string>life</string>
-     </property>
-    </column>
-    <item>
-     <property name="text">
-      <string>Nowy element</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>Nowy podelement</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>Nowy podelement</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>Nowy podelement</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>Nowy podelement</string>
-         </property>
-        </item>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nowy element</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nowy element</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nowy podelement</string>
-        </property>
-       </item>
-      </item>
-     </item>
-    </item>
-    <item>
-     <property name="text">
-      <string>sd</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>d</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>Nowy podelement</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>Nowy podelement</string>
-       </property>
-      </item>
-     </item>
-    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
