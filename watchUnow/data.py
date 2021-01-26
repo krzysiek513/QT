@@ -12,6 +12,12 @@ class Dane:
     def getTekst(self):
         return self.tekst
 
+    def setText(self, text):
+        self.tekst = text
+
+    def setName(self, name):
+        self.name = name
+
 
 class model(object):
     list1 = []

@@ -2,11 +2,12 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, QFileDialog, QLabel, QLineEdit, QPushButton, QDialog, \
     QGridLayout, QListWidgetItem
-from PyQt5.QtGui import QKeySequence, QPalette, QColor
+from PyQt5.QtGui import QKeySequence, QPalette, QColor, QContextMenuEvent
 from PyQt5.QtCore import Qt
 
 from mainView import *
 from data import  *
+from ContextMenu import *
 
 palette = QPalette()
 palette.setColor(QPalette.Window, QColor(53, 53, 53))
@@ -28,25 +29,60 @@ class MyForm(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.mod = model()
+        #self.ctx = ContextMenu()
         self.ui.setupUi(self)
         self.ui.listWidget.addItem(self.mod.list1[0].getName())
         self.ui.actionNew.triggered.connect(self.newListItem)
         # self.ui.actionOpen.triggered.connect(self.openFileDialog)
         # self.ui.actionSave.triggered.connect(self.saveFileDialog)
 
+    def contextMenuEvent(self, event):
+        cmenu = QMenu(self)
+
+        newAct = cmenu.addAction('New Item')
+        dele = cmenu.addAction('Delete Item')
+        quitAction = cmenu.addAction('Quit')
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == quitAction:
+            qApp.quit()
+
+        if action == newAct:
+            self.newListItem()
+
+        if action == dele:
+            if self.ui.listWidget.currentItem() != None:
+                dele = self.ui.listWidget.takeItem(self.ui.listWidget.currentRow())
+                self.ui.textEdit.setText('')
+                print(dele.text())
+                print(self.mod.list1)
+                print(self.ui.listWidget.count())
+                print(self.ui.listWidget.currentRow())
+                for c in self.mod.list1:
+                    if c.getName() == dele.text():
+                        self.mod.list1.remove(c)
+
         ###################################################
         ##
         ##  Sygnały
         ##
         ###################################################
-
+        self.ui.textEdit.textChanged.connect(self.onTextChanged)
         self.ui.listWidget.itemClicked.connect(self.onItemClicked)
 
         self.show()
 
+    def onTextChanged(self):
+        x = self.ui.listWidget.currentRow()
+        print(f'{x}, typ {type(x)}, tekst {self.ui.textEdit.toPlainText()}')
+        self.mod.list1[x].setText(self.ui.textEdit.toPlainText())
+
+
     def onItemClicked(self, item):
         x = self.ui.listWidget.currentRow()
         print(f'{item.text()}, miejsce {x}, typ {type(item)}')
+        self.ui.textEdit.setText(self.mod.list1[int(x)].getTekst())
+        print(self.mod.list1[int(x)].getTekst())
 
     def newListItem(self):
         dialogBox = QDialog()
