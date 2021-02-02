@@ -6,7 +6,7 @@ from PyQt5.QtGui import QKeySequence, QPalette, QColor, QContextMenuEvent
 from PyQt5.QtCore import Qt
 
 from mainView import *
-from data import  *
+from data import *
 from ContextMenu import *
 
 palette = QPalette()
@@ -29,12 +29,63 @@ class MyForm(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.mod = model()
-        #self.ctx = ContextMenu()
+        #self.ctx = ContextMenu(self)
         self.ui.setupUi(self)
         self.ui.listWidget.addItem(self.mod.list1[0].getName())
+        self.ui.textEdit.setText(self.mod.list1[0].getTekst())
         self.ui.actionNew.triggered.connect(self.newListItem)
-        # self.ui.actionOpen.triggered.connect(self.openFileDialog)
-        # self.ui.actionSave.triggered.connect(self.saveFileDialog)
+        self.ui.actionQuit.triggered.connect(self.quit)
+
+
+        self.ui.actionOpen.triggered.connect(self.openFile)
+        self.ui.actionSave.triggered.connect(self.saveFile)
+
+    def openFile(self):
+        fname = QFileDialog.getOpenFileName(self, 'Open file', '/home')
+
+        if fname[0]:
+            f = open(fname[0], 'r')
+
+            self.mod.list1.clear()
+            self.ui.listWidget.clear()
+            self.ui.textEdit.clear()
+
+            with f:
+                data = f.read()
+                print(data)
+                lines = data.split('\n')
+                for line in lines:
+                    x = line.find('nazwaPolaDanych:')
+                    y = line.find('danePodpieteDoPolaDanych:')
+                    if x != -1 and y != -1:
+                        print(line[16:y])
+                        print(line[y+25:])
+                        print(x)
+                        print(y)
+                        dane = Dane(line[16:y], line[y+25:])
+                        print(dane.name)
+                        self.mod.list1.append(dane)
+                        self.ui.listWidget.addItem(dane.name)
+        print(self.mod.list1[1].getTekst())
+        self.ui.textEdit.setText(self.mod.list1[0].getTekst())
+
+    def saveFile(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "",
+                                                  "All Files (*);;Text Files (*.txt)", options=options)
+        f = open(fileName, 'w')
+        i = 0
+        for item in self.mod.list1:
+            dane = self.mod.list1[i].getTekst()
+            name = self.mod.list1[i].getName()
+            output = f"nazwaPolaDanych:{name}danePodpieteDoPolaDanych:{dane}\n"
+            f.write(output)
+            i = i + 1
+        f.close()
+
+    def quit(self):
+        qApp.quit()
 
     def contextMenuEvent(self, event):
         cmenu = QMenu(self)
@@ -54,10 +105,12 @@ class MyForm(QMainWindow):
             if self.ui.listWidget.currentItem() != None:
                 dele = self.ui.listWidget.takeItem(self.ui.listWidget.currentRow())
                 self.ui.textEdit.setText('')
-                print(dele.text())
-                print(self.mod.list1)
-                print(self.ui.listWidget.count())
-                print(self.ui.listWidget.currentRow())
+                # print(dele.text())
+                # print(self.mod.list1)
+                # print(self.ui.listWidget.count())
+                # x = self.ui.listWidget.currentRow()
+                # print(x)
+                # self.mod.list1.remove()
                 for c in self.mod.list1:
                     if c.getName() == dele.text():
                         self.mod.list1.remove(c)
@@ -67,6 +120,7 @@ class MyForm(QMainWindow):
         ##  Sygnały
         ##
         ###################################################
+
         self.ui.textEdit.textChanged.connect(self.onTextChanged)
         self.ui.listWidget.itemClicked.connect(self.onItemClicked)
 
@@ -74,15 +128,14 @@ class MyForm(QMainWindow):
 
     def onTextChanged(self):
         x = self.ui.listWidget.currentRow()
-        print(f'{x}, typ {type(x)}, tekst {self.ui.textEdit.toPlainText()}')
+        # print(f'{x}, typ {type(x)}, tekst {self.ui.textEdit.toPlainText()}')
         self.mod.list1[x].setText(self.ui.textEdit.toPlainText())
-
 
     def onItemClicked(self, item):
         x = self.ui.listWidget.currentRow()
-        print(f'{item.text()}, miejsce {x}, typ {type(item)}')
+        # print(f'{item.text()}, miejsce {x}, typ {type(item)}')
         self.ui.textEdit.setText(self.mod.list1[int(x)].getTekst())
-        print(self.mod.list1[int(x)].getTekst())
+        # print(self.mod.list1[int(x)].getTekst())
 
     def newListItem(self):
         dialogBox = QDialog()
@@ -100,7 +153,6 @@ class MyForm(QMainWindow):
                 dane = Dane(nazwa, '')
                 #self.ui.listWidget.addItem(QListWidgetItem(nazwa))
                 self.ui.listWidget.addItem(dane.name)
-                self.ui.textEdit.setText(dane.tekst)
                 self.mod.list1.append(dane)
                 dialogBox.close()
 
@@ -109,6 +161,8 @@ class MyForm(QMainWindow):
 
         nazwa = QLabel('nazwa', dialogBox)
         EImie = QLineEdit()
+        EImie.setFocus()
+
 
         buttonAdd = QPushButton('dodaj', dialogBox)
         # dialogBox.setFixedSize(200, 200)
