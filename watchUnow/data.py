@@ -21,4 +21,4 @@ class Dane:
 
 class model(object):
     list1 = []
-    list1.append(Dane('Jot', 'Jokr fsd f sg gfsdg dgf sd'))
+    # list1.append(Dane('Jot', 'Jokr fsd f sg gfsdg dgf sd'))

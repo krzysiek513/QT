@@ -31,14 +31,54 @@ class MyForm(QMainWindow):
         self.mod = model()
         #self.ctx = ContextMenu(self)
         self.ui.setupUi(self)
-        self.ui.listWidget.addItem(self.mod.list1[0].getName())
-        self.ui.textEdit.setText(self.mod.list1[0].getTekst())
-        self.ui.actionNew.triggered.connect(self.newListItem)
+        # self.ui.listWidget.addItem(self.mod.list1[0].getName())
+        # self.ui.textEdit.setText(self.mod.list1[0].getTekst())
+        self.ui.actionNew.triggered.connect(self.newList)
         self.ui.actionQuit.triggered.connect(self.quit)
 
+        # actionBugs - howto
+        #
 
+        self.ui.actionWorking.triggered.connect(self.working)
+        self.ui.actionAbout.triggered.connect(self.showInfo)
         self.ui.actionOpen.triggered.connect(self.openFile)
         self.ui.actionSave.triggered.connect(self.saveFile)
+
+    def newList(self):
+        choice = QMessageBox.question(self, 'Nowa lista', 'Czy na pewno chciałesz usunąć starą liste?',
+                                      QMessageBox.Yes | QMessageBox.No)
+
+        if choice == QMessageBox.Yes:
+            self.mod.list1.clear()
+            self.ui.listWidget.clear()
+            self.ui.textEdit.clear()
+
+    def working(self):
+        msgb = QMessageBox()
+        msgb.setIcon(QMessageBox.Information)
+        msgb.setText('04.03.2021\nNew w menubar tworzy nową liate, zaczyna cały projekt od nowa\n'
+                     'Poprawienie funkcjonowania aplika - new/open/save\n'
+                     'how to - jest to manual jak używać program\n\n\n'
+                     '03.03.2021\nWygląd aplikacji plik View - menubar, lista danych, tekst danych'
+                     'manubar i wszystkie w zawrte w nim kategorie - bez fukcjonalności\n'
+                     'listWidget w których zawrta są nazwy obiektów do nauki\n'
+                     'textedit w którym umieszczamy tekst do nauki interesującego nas zagadnienia\n'
+                     'Plik pomocniczy zawierający klase date i lieste w której przechowujemy dane\n'
+                     'action New umożliwiająca dodawanie nowego itemu do listy\n'
+                     'action save zapisuje dane stoworzone w programie\n'
+                     'action open otwiera wchesniej zapisany plik (działa poprawnie dopiero po dadaniu nowego itemu do listy)\n'
+                     'help wyswietlający informacje o programie\n')
+        msgb.setWindowTitle('Working')
+        msgb.setStandardButtons(QMessageBox.Ok)
+        msgb.exec_()
+
+    def showInfo(self):
+        msgb = QMessageBox()
+        msgb.setIcon(QMessageBox.Information)
+        msgb.setText('Projekt napisany w pyqt5, przygotowany na zaliczenie QT\n\nKrzysztof Jóźwikowski')
+        msgb.setWindowTitle('About')
+        msgb.setStandardButtons(QMessageBox.Ok)
+        msgb.exec_()
 
     def openFile(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file', '/home')
@@ -58,16 +98,18 @@ class MyForm(QMainWindow):
                     x = line.find('nazwaPolaDanych:')
                     y = line.find('danePodpieteDoPolaDanych:')
                     if x != -1 and y != -1:
-                        print(line[16:y])
-                        print(line[y+25:])
-                        print(x)
-                        print(y)
+                        # print(line[16:y])
+                        # print(line[y+25:])
+                        # print(x)
+                        # print(y)
                         dane = Dane(line[16:y], line[y+25:])
+                        print(type(dane))
                         print(dane.name)
+                        print(dane.tekst)
                         self.mod.list1.append(dane)
                         self.ui.listWidget.addItem(dane.name)
-        print(self.mod.list1[1].getTekst())
-        self.ui.textEdit.setText(self.mod.list1[0].getTekst())
+            print(self.mod.list1[1].getTekst())
+            self.ui.textEdit.setText(self.mod.list1[0].getTekst())
 
     def saveFile(self):
         options = QFileDialog.Options()
@@ -127,15 +169,17 @@ class MyForm(QMainWindow):
         self.show()
 
     def onTextChanged(self):
-        x = self.ui.listWidget.currentRow()
-        # print(f'{x}, typ {type(x)}, tekst {self.ui.textEdit.toPlainText()}')
-        self.mod.list1[x].setText(self.ui.textEdit.toPlainText())
+        if self.ui.listWidget.currentItem() != None:
+            x = self.ui.listWidget.currentRow()
+            # print(f'{x}, typ {type(x)}, tekst {self.ui.textEdit.toPlainText()}')
+            self.mod.list1[x].setText(self.ui.textEdit.toPlainText())
 
     def onItemClicked(self, item):
-        x = self.ui.listWidget.currentRow()
-        # print(f'{item.text()}, miejsce {x}, typ {type(item)}')
-        self.ui.textEdit.setText(self.mod.list1[int(x)].getTekst())
-        # print(self.mod.list1[int(x)].getTekst())
+        if self.ui.listWidget.currentItem() != None:
+            x = self.ui.listWidget.currentRow()
+            # print(f'{item.text()}, miejsce {x}, typ {type(item)}')
+            self.ui.textEdit.setText(self.mod.list1[int(x)].getTekst())
+            # print(self.mod.list1[int(x)].getTekst())
 
     def newListItem(self):
         dialogBox = QDialog()

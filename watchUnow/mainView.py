@@ -161,7 +161,7 @@ class Ui_MainWindow(object):
         self.menuHelp.setTitle(_translate("MainWindow", "Tools"))
         self.menuHelp_2.setTitle(_translate("MainWindow", "Help"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.actionBugs.setText(_translate("MainWindow", "Bugs"))
+        self.actionBugs.setText(_translate("MainWindow", "How to"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
         self.actionWordCount.setText(_translate("MainWindow", "Word Count"))
         self.actionOpenNotebookFolder.setText(_translate("MainWindow", "Open Notebook folder"))
