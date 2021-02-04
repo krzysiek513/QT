@@ -35,10 +35,12 @@ class MyForm(QMainWindow):
         # self.ui.textEdit.setText(self.mod.list1[0].getTekst())
         self.ui.actionNew.triggered.connect(self.newList)
         self.ui.actionQuit.triggered.connect(self.quit)
+        if self.mod.list1 == []:
+            self.ui.textEdit.setReadOnly(True)
 
         # actionBugs - howto
         #
-
+        self.ui.actionBugs.triggered.connect(self.bugs)
         self.ui.actionWorking.triggered.connect(self.working)
         self.ui.actionAbout.triggered.connect(self.showInfo)
         self.ui.actionOpen.triggered.connect(self.openFile)
@@ -52,22 +54,20 @@ class MyForm(QMainWindow):
             self.mod.list1.clear()
             self.ui.listWidget.clear()
             self.ui.textEdit.clear()
+            self.ui.textEdit.setReadOnly(True)
+
+    def bugs(self):
+        msgb = QMessageBox()
+        msgb.setIcon(QMessageBox.Information)
+        msgb.setText(self.mod.bug)
+        msgb.setWindowTitle('Working')
+        msgb.setStandardButtons(QMessageBox.Ok)
+        msgb.exec_()
 
     def working(self):
         msgb = QMessageBox()
         msgb.setIcon(QMessageBox.Information)
-        msgb.setText('04.03.2021\nNew w menubar tworzy nową liate, zaczyna cały projekt od nowa\n'
-                     'Poprawienie funkcjonowania aplika - new/open/save\n'
-                     'how to - jest to manual jak używać program\n\n\n'
-                     '03.03.2021\nWygląd aplikacji plik View - menubar, lista danych, tekst danych'
-                     'manubar i wszystkie w zawrte w nim kategorie - bez fukcjonalności\n'
-                     'listWidget w których zawrta są nazwy obiektów do nauki\n'
-                     'textedit w którym umieszczamy tekst do nauki interesującego nas zagadnienia\n'
-                     'Plik pomocniczy zawierający klase date i lieste w której przechowujemy dane\n'
-                     'action New umożliwiająca dodawanie nowego itemu do listy\n'
-                     'action save zapisuje dane stoworzone w programie\n'
-                     'action open otwiera wchesniej zapisany plik (działa poprawnie dopiero po dadaniu nowego itemu do listy)\n'
-                     'help wyswietlający informacje o programie\n')
+        msgb.setText(self.mod.done)
         msgb.setWindowTitle('Working')
         msgb.setStandardButtons(QMessageBox.Ok)
         msgb.exec_()
@@ -75,7 +75,7 @@ class MyForm(QMainWindow):
     def showInfo(self):
         msgb = QMessageBox()
         msgb.setIcon(QMessageBox.Information)
-        msgb.setText('Projekt napisany w pyqt5, przygotowany na zaliczenie QT\n\nKrzysztof Jóźwikowski')
+        msgb.setText(self.mod.info)
         msgb.setWindowTitle('About')
         msgb.setStandardButtons(QMessageBox.Ok)
         msgb.exec_()
@@ -198,6 +198,7 @@ class MyForm(QMainWindow):
                 #self.ui.listWidget.addItem(QListWidgetItem(nazwa))
                 self.ui.listWidget.addItem(dane.name)
                 self.mod.list1.append(dane)
+                self.ui.textEdit.setReadOnly(False)
                 dialogBox.close()
 
         def anu():
@@ -220,7 +221,6 @@ class MyForm(QMainWindow):
         gridLayout.addWidget(buttonAdd, 1, 0)
         gridLayout.addWidget(buttonDel, 1, 1)
         dialogBox.exec_()
-
 
 
 if __name__ == "__main__":
