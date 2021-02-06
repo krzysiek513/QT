@@ -33,18 +33,45 @@ class MyForm(QMainWindow):
         self.ui.setupUi(self)
         # self.ui.listWidget.addItem(self.mod.list1[0].getName())
         # self.ui.textEdit.setText(self.mod.list1[0].getTekst())
+        
         self.ui.actionNew.triggered.connect(self.newList)
         self.ui.actionQuit.triggered.connect(self.quit)
         if self.mod.list1 == []:
             self.ui.textEdit.setReadOnly(True)
 
-        # actionBugs - howto
+        # actionFind
+        # actionSearch
         #
+        #
+
+        self.ui.actionFind.triggered.connect(self.bugs)
+        self.ui.actionSearch.triggered.connect(self.bugs)
+        self.ui.actionWordCount.triggered.connect(self.wordCount)
+        self.ui.actionZoomOut.triggered.connect(self.zoomOut)
+        self.ui.actionZoomIn.triggered.connect(self.zoomIn)
         self.ui.actionBugs.triggered.connect(self.bugs)
         self.ui.actionWorking.triggered.connect(self.working)
         self.ui.actionAbout.triggered.connect(self.showInfo)
         self.ui.actionOpen.triggered.connect(self.openFile)
         self.ui.actionSave.triggered.connect(self.saveFile)
+
+    def zoomIn(self):
+        self.ui.textEdit.zoomIn()
+
+    def zoomOut(self):
+        self.ui.textEdit.zoomOut()
+
+    def wordCount(self):
+        plainTexxt = self.ui.textEdit.toPlainText()
+        count = 0
+        for x in plainTexxt:
+            count = count +1
+        print(count)
+        msgb = QMessageBox()
+        msgb.setIcon(QMessageBox.Question)
+        msgb.setText(f'character is {count} in text')
+        msgb.setWindowTitle('Word count')
+        msgb.exec_()
 
     def newList(self):
         choice = QMessageBox.question(self, 'Nowa lista', 'Czy na pewno chciałesz usunąć starą liste?',
@@ -94,6 +121,7 @@ class MyForm(QMainWindow):
                 data = f.read()
                 print(data)
                 lines = data.split('\n')
+                self.ui.textEdit.setReadOnly(False)
                 for line in lines:
                     x = line.find('nazwaPolaDanych:')
                     y = line.find('danePodpieteDoPolaDanych:')

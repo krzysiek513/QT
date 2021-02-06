@@ -34,9 +34,9 @@ class model(object):
           'Open - otwiera wcześniej zapisany notatnik, Save - opcja ta służy do zapisy notatek' \
           'Quit - służy do zamknięcia aplikacji\n' \
           'Drugą opcją jest edit - do zrobienia\n' \
-          'potem jest View - do zrobienia\n' \
+          'potem jest View - zoomIm i zoomOut, służą odpowiednio do zwiększania i zmniejszania czcionki w wyświetlonym tekście\n' \
           'Search - do zrobienia\n' \
-          'Tools - do zrobienia\n' \
+          'Tools - word count - zlicza ilość wyświetlonego tekstu w dokładności do znaku\n' \
           'Na końcu znajduje się help. W tym dziale mamy na liście trzy możliwości. how to - jest to krótkie ' \
           'wprowadzenie do aplikacji co zawiera i jak ją używać. Następnie jest working, znajduje się tam krótki ' \
           'opis tego co w aplikacji działa. Na końcu listy jest dział info mówiacy o głównych przyczynasz powstania ' \
